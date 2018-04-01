@@ -39,7 +39,7 @@ RTE_TARGET ?= x86_64-native-linuxapp-gcc
 include $(RTE_SDK)/mk/rte.vars.mk
 
 APP = xellico
-SRCS-y := main.c
+SRCS-y := main.c lcore.c
 CFLAGS += -O3 -g
 CFLAGS += $(WERROR_FLAGS)
 
