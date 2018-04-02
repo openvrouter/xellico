@@ -1,10 +1,13 @@
 
+#include <vector>
 #include "xellico.h"
+#include "lcore_conf.h"
 #include "port.h"
 
 #define NB_MBUF 8192
 #define MEMPOOL_CACHE_SIZE 256
 
+extern std::vector <struct queue_conf> all_qconf;
 struct rte_eth_conf port_conf;
 struct rte_mempool* pktmbuf_pool[RTE_MAX_ETHPORTS];
 
@@ -40,9 +43,21 @@ port_mempool_init ()
     }
 }
 
-void
-port_init (size_t nb_rxq)
+static size_t
+get_nb_rxq (uint32_t port_id)
 {
+  size_t cnt = 0;
+  for (size_t i=0; i<all_qconf.size(); i++) {
+    if (all_qconf[i].port_id == port_id) cnt ++;
+  }
+  return cnt;
+}
+
+void
+port_init (void)
+{
+  init_port_conf (&port_conf);
+
   const uint8_t nb_ports = rte_eth_dev_count ();
   if (nb_ports == 0)
     rte_exit (EXIT_FAILURE, "No Ethernet ports - bye\n");
@@ -53,6 +68,7 @@ port_init (size_t nb_rxq)
   uint8_t nb_ports_available = nb_ports;
   for (uint8_t portid = 0; portid < nb_ports; portid++)
     {
+      const size_t nb_rxq = get_nb_rxq (portid);
       const size_t nb_txq = rte_lcore_count();
       printf("Initializing port %u... \n", (unsigned) portid);
       int ret = rte_eth_dev_configure (portid, nb_rxq, nb_txq, &port_conf);

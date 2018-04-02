@@ -19,7 +19,7 @@ LIBS = \
     -Wl,--no-whole-archive
 
 TARGET = xellico
-SRC = lcore.cc main.cc \
+SRC = lcore_conf.cc main.cc \
 			forwarder.cc force_quit.cc port.cc
 OBJ = $(SRC:.cc=.o)
 

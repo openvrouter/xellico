@@ -15,7 +15,7 @@
 #include <vector>
 #include "xellico.h"
 #include "dpdk_misc.h"
-#include "lcore.h"
+#include "lcore_conf.h"
 #include "forwarder.h"
 #include "force_quit.h"
 #include "port.h"
@@ -78,6 +78,13 @@ init_conf (void)
   all_qconf.push_back ({1, 7, 17});
 }
 
+static void
+validate_conf (void)
+{
+  // TODO Impelmentation
+  return ;
+}
+
 static int
 launcher (__attribute__ ((unused)) void *dummy)
 {
@@ -107,20 +114,14 @@ main (int argc, char **argv)
   signal (SIGTERM, signal_handler);
 
   init_conf ();
+  validate_conf ();
   create_lcore_conf ();
-  init_port_conf (&port_conf);
-  port_init (8);
+  port_init ();
   init_fib ();
 
-  /*
-   * Threaad Launch
-   */
   rte_eal_mp_remote_launch (launcher, NULL, SKIP_MASTER);
   rte_eal_mp_wait_lcore ();
 
-  /*
-   * Termination
-   */
   port_fini ();
   printf ("Bye...\n");
   return ret;
