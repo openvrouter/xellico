@@ -14,32 +14,12 @@
 #include "xellico.h"
 #include "dpdk_misc.h"
 #include "lcore.h"
+#include "port_conf.h"
 
 
 static volatile bool force_quit;
 static uint32_t l2fwd_dst_ports[RTE_MAX_ETHPORTS];
 struct lcore_queue_conf lcore_queue_conf[RTE_MAX_LCORE];
-
-static const struct rte_eth_conf port_conf = {
-  .rxmode = {
-    .split_hdr_size = 0,
-    .header_split   = 0, /**< Header Split disabled */
-    .hw_ip_checksum = 0, /**< IP checksum offload disabled */
-    .hw_vlan_filter = 0, /**< VLAN filtering disabled */
-    .jumbo_frame    = 0, /**< Jumbo Frame Support disabled */
-    .hw_strip_crc   = 1, /**< CRC stripped by hardware */
-    .mq_mode = ETH_MQ_RX_RSS,
-  },
-  .txmode = {
-    .mq_mode = ETH_MQ_TX_NONE,
-  },
-  .rx_adv_conf = {
-    .rss_conf = {
-      .rss_key = NULL,
-      .rss_hf = ETH_RSS_IP|ETH_RSS_TCP|ETH_RSS_UDP,
-    },
-  },
-};
 
 struct rte_mempool* pktmbuf_pool[RTE_MAX_LCORE];
 

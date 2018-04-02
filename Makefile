@@ -39,13 +39,13 @@ RTE_TARGET ?= x86_64-native-linuxapp-gcc
 include $(RTE_SDK)/mk/rte.vars.mk
 
 APP = xellico
-SRCS-y := main.c lcore.c
+SRCS-y := main.c lcore.c port_conf.c
 CFLAGS += -O3 -g
 CFLAGS += $(WERROR_FLAGS)
 
 include $(RTE_SDK)/mk/rte.extapp.mk
 
-rune:
+runp:
 	sudo ./build/xellico
 
 run:
