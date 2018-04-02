@@ -61,10 +61,6 @@ init_conf (void)
   all_qconf.push_back ({1, 0, 3});
   all_qconf.push_back ({0, 1, 4});
   all_qconf.push_back ({1, 1, 5});
-  all_qconf.push_back ({0, 2, 6});
-  all_qconf.push_back ({1, 2, 7});
-  all_qconf.push_back ({0, 3, 8});
-  all_qconf.push_back ({1, 3, 9});
 }
 
 static int
@@ -98,7 +94,7 @@ main (int argc, char **argv)
   init_conf ();
   create_lcore_conf ();
   init_port_conf (&port_conf);
-  port_init (4);
+  port_init (2);
   init_fib ();
 
   /*

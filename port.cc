@@ -26,12 +26,16 @@ port_mempool_init ()
     {
       char str[128];
       snprintf (str, sizeof (str), "pktmbuf_pool[%zd]", i);
+
       pktmbuf_pool[i] = rte_pktmbuf_pool_create (str, NB_MBUF,
         MEMPOOL_CACHE_SIZE, 0, RTE_MBUF_DEFAULT_BUF_SIZE,
         rte_eth_dev_socket_id(i));
+
       if (pktmbuf_pool[i] == NULL)
         rte_exit (EXIT_FAILURE, "Cannot init mbuf pool %s\n", str);
-      RTE_LOG (INFO, XELLICO, "create mempool %s on socket %u\n",
+
+      RTE_LOG (INFO, XELLICO,
+          "create mempool %s on socket %u\n",
           str, rte_eth_dev_socket_id(i));
     }
 }
