@@ -31,7 +31,8 @@ init_queue_conf (void)
     {
       for (size_t portid=0; portid<nb_ports; portid++)
         {
-          struct rte_eth_dev_tx_buffer* txbuff = rte_zmalloc_socket ("tx_buffer",
+          struct rte_eth_dev_tx_buffer* txbuff = (struct rte_eth_dev_tx_buffer*)
+            rte_zmalloc_socket ("tx_buffer",
               RTE_ETH_TX_BUFFER_SIZE (MAX_PKT_BURST), 0,
               rte_eth_dev_socket_id (portid));
           if (txbuff == NULL)
@@ -180,6 +181,7 @@ signal_handler (int signum)
 int
 main (int argc, char **argv)
 {
+  init_port_conf (&port_conf);
   int ret = xellico_boot_dpdk (argc, argv);
   argc -= ret;
   argv += ret;
