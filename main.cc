@@ -6,182 +6,87 @@
  * Copyright(c) 2018 Souta Kawahara
  * Copyright(c) 2018 Hiroki Shirokura
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
+#include <vector>
 #include "xellico.h"
 #include "dpdk_misc.h"
 #include "lcore.h"
-#include "port_conf.h"
+#include "forwarder.h"
+#include "force_quit.h"
+#include "port.h"
 
-
-static volatile bool force_quit;
-static uint32_t l2fwd_dst_ports[RTE_MAX_ETHPORTS];
-struct lcore_queue_conf lcore_queue_conf[RTE_MAX_LCORE];
-
-struct rte_mempool* pktmbuf_pool[RTE_MAX_LCORE];
+std::vector <struct queue_conf> all_qconf;
+struct lcore_conf lcore_conf[RTE_MAX_LCORE];
 
 static void
-init_queue_conf (void)
+create_lcore_conf (void)
 {
-  const size_t nb_ports = rte_eth_dev_count();
-  for (size_t i=0; i<RTE_MAX_LCORE; i++)
+  const size_t n_lcores = rte_lcore_count ();
+  for (size_t i=0; i<n_lcores; i++)
     {
-      for (size_t portid=0; portid<nb_ports; portid++)
+      for (size_t j=0; j<all_qconf.size(); j++)
+        if (all_qconf[j].lcore_id == i)
+          lcore_conf[i].qconf.push_back (all_qconf[j]);
+    }
+
+
+  for (size_t i=0; i<n_lcores; i++)
+    {
+      const size_t n_ports = rte_eth_dev_count ();
+      for (size_t pid=0; pid<n_ports; pid++)
         {
           struct rte_eth_dev_tx_buffer* txbuff = (struct rte_eth_dev_tx_buffer*)
             rte_zmalloc_socket ("tx_buffer",
               RTE_ETH_TX_BUFFER_SIZE (MAX_PKT_BURST), 0,
-              rte_eth_dev_socket_id (portid));
+              rte_eth_dev_socket_id (pid));
           if (txbuff == NULL)
             rte_exit(EXIT_FAILURE, "Cannot allocate buffer for tx on port %u\n",
-                (unsigned) portid);
-          lcore_queue_conf[i].tx_buffer[portid] = txbuff;
+                (unsigned) pid);
+
+          rte_eth_tx_buffer_init (txbuff, MAX_PKT_BURST);
+          lcore_conf[i].tx_buffer[pid] = txbuff;
         }
     }
-
-  lcore_queue_conf[0].n_rx_port = 4;
-  lcore_queue_conf[0].rx_port_queue_list[0].port_id  = 0;
-  lcore_queue_conf[0].rx_port_queue_list[0].queue_id = 0;
-  lcore_queue_conf[0].rx_port_queue_list[1].port_id  = 0;
-  lcore_queue_conf[0].rx_port_queue_list[1].queue_id = 2;
-  lcore_queue_conf[0].rx_port_queue_list[2].port_id  = 0;
-  lcore_queue_conf[0].rx_port_queue_list[2].queue_id = 1;
-  lcore_queue_conf[0].rx_port_queue_list[3].port_id  = 0;
-  lcore_queue_conf[0].rx_port_queue_list[3].queue_id = 3;
-
-  lcore_queue_conf[1].n_rx_port = 4;
-  lcore_queue_conf[1].rx_port_queue_list[0].port_id  = 1;
-  lcore_queue_conf[1].rx_port_queue_list[0].queue_id = 0;
-  lcore_queue_conf[1].rx_port_queue_list[1].port_id  = 1;
-  lcore_queue_conf[1].rx_port_queue_list[1].queue_id = 2;
-  lcore_queue_conf[1].rx_port_queue_list[2].port_id  = 1;
-  lcore_queue_conf[1].rx_port_queue_list[2].queue_id = 1;
-  lcore_queue_conf[1].rx_port_queue_list[3].port_id  = 1;
-  lcore_queue_conf[1].rx_port_queue_list[3].queue_id = 3;
 }
 
-static inline void
-l2fwd_simple_forward (struct rte_mbuf *m, unsigned portid)
-{
-  uint32_t lcore_id = rte_lcore_id();
-  struct lcore_queue_conf* qconf = &lcore_queue_conf[lcore_id];
-  unsigned dst_port = l2fwd_dst_ports[portid];
-  unsigned dst_queue = lcore_id;
-  struct rte_eth_dev_tx_buffer* buffer = qconf->tx_buffer[dst_port];
-  rte_eth_tx_buffer(dst_port, dst_queue, buffer, m);
-}
-
-/* main processing loop */
 static void
-l2fwd_main_loop (void)
+init_conf (void)
 {
-  unsigned lcore_id = rte_lcore_id ();
-  struct lcore_queue_conf *qconf = &lcore_queue_conf[lcore_id];
-
-  if (qconf->n_rx_port == 0)
-    {
-      RTE_LOG (INFO, XELLICO, "lcore %u has nothing to do\n", lcore_id);
-#if 0
-      if (lcore_id == 31)
-        while (!force_quit)
-          {
-            printf("---\n");
-            if (pktmbuf_pool[0]) dump_mempool(pktmbuf_pool[0]);
-            printf("---\n");
-            if (pktmbuf_pool[1]) dump_mempool(pktmbuf_pool[1]);
-            printf("==============\n");
-            sleep(1);
-          }
-#endif
-      return;
-    }
-
-  RTE_LOG (INFO, XELLICO, "entering main loop on lcore %u\n", lcore_id);
-
-  for (size_t i = 0; i < qconf->n_rx_port; i++)
-    {
-      unsigned portid = qconf->rx_port_queue_list[i].port_id;
-      unsigned queueid = qconf->rx_port_queue_list[i].queue_id;
-      RTE_LOG (INFO, XELLICO,
-          " -- lcoreid=%u portid=%u queueid=%u\n",
-          lcore_id, portid, queueid);
-    }
-
-  uint64_t prev_tsc = 0;
-  const uint64_t drain_tsc =
-      (rte_get_tsc_hz () + US_PER_S - 1)
-      / US_PER_S * BURST_TX_DRAIN_US;
-  printf ("Staring Main_loop on lcore%u \n", rte_lcore_id());
-  dump_queue_conf (qconf);
-  while (!force_quit)
-    {
-      /*
-       * TX burst queue drain
-       */
-      uint64_t cur_tsc = rte_rdtsc ();
-      uint64_t diff_tsc = cur_tsc - prev_tsc;
-      if (unlikely (diff_tsc > drain_tsc))
-        {
-          for (size_t i = 0; i < qconf->n_rx_port; i++)
-            {
-              uint32_t dst_portid = l2fwd_dst_ports[qconf->rx_port_queue_list[i].port_id];
-              uint32_t dst_queueid = rte_lcore_id();
-              struct rte_eth_dev_tx_buffer *buffer = qconf->tx_buffer[dst_portid];
-              rte_eth_tx_buffer_flush (dst_portid, dst_queueid, buffer);
-            }
-          prev_tsc = cur_tsc;
-        }
-
-      /*
-       * Read packet from RX queues
-       */
-      for (size_t i = 0; i < qconf->n_rx_port; i++)
-        {
-          struct rte_mbuf *pkts_burst[MAX_PKT_BURST];
-          uint32_t in_portid = qconf->rx_port_queue_list[i].port_id;
-          uint32_t in_queueid = qconf->rx_port_queue_list[i].queue_id;
-          unsigned nb_rx = rte_eth_rx_burst ((uint8_t) in_portid,
-              in_queueid, pkts_burst, MAX_PKT_BURST);
-
-          for (size_t j = 0; j < nb_rx; j++)
-            {
-              struct rte_mbuf *m = pkts_burst[j];
-
-#if 1 // DELAY
-              rte_delay_us_block (1);
-#endif
-
-              rte_prefetch0 (rte_pktmbuf_mtod (m, void *));
-              l2fwd_simple_forward (m, in_portid);
-            }
-        }
-    }
+  all_qconf.push_back ({0, 0, 0});
+  all_qconf.push_back ({1, 0, 1});
+  all_qconf.push_back ({0, 1, 2});
+  all_qconf.push_back ({1, 1, 3});
+  all_qconf.push_back ({0, 2, 4});
+  all_qconf.push_back ({1, 2, 5});
+  all_qconf.push_back ({0, 3, 6});
+  all_qconf.push_back ({1, 3, 7});
 }
 
 static int
-l2fwd_launch_one_lcore (__attribute__ ((unused)) void *dummy)
+launcher (__attribute__ ((unused)) void *dummy)
 {
-  l2fwd_main_loop ();
+  forwarder ();
   return 0;
 }
 
 static void
 signal_handler (int signum)
 {
-  if (signum == SIGINT || signum == SIGTERM) {
-    printf("\n\nSignal %d received, preparing to exit...\n",
-        signum);
-    force_quit = true;
-  }
+  if (signum == SIGINT || signum == SIGTERM)
+    {
+      printf("\n\nSignal %d received, preparing to exit...\n", signum);
+      force_quit = true;
+    }
 }
 
 int
 main (int argc, char **argv)
 {
-  init_port_conf (&port_conf);
   int ret = xellico_boot_dpdk (argc, argv);
   argc -= ret;
   argv += ret;
@@ -190,128 +95,23 @@ main (int argc, char **argv)
   signal (SIGINT, signal_handler);
   signal (SIGTERM, signal_handler);
 
-  /* create the mbuf pool */
-  for (size_t i=0; i<rte_socket_count(); i++)
-    {
-      char str[128];
-      snprintf (str, sizeof (str), "mbuf_pool[%zd]", i);
-      pktmbuf_pool[i] = rte_pktmbuf_pool_create (str, NB_MBUF,
-        MEMPOOL_CACHE_SIZE, 0, RTE_MBUF_DEFAULT_BUF_SIZE, i);
-      if (pktmbuf_pool[i] == NULL)
-        rte_exit (EXIT_FAILURE, "Cannot init mbuf pool %s\n", str);
-      RTE_LOG (INFO, XELLICO, "create mempool %s\n", str);
-    }
-
-  uint8_t nb_ports = rte_eth_dev_count ();
-  if (nb_ports == 0)
-    rte_exit (EXIT_FAILURE, "No Ethernet ports - bye\n");
-
-  /* reset l2fwd_dst_ports */
-  for (uint8_t portid = 0; portid < RTE_MAX_ETHPORTS; portid++)
-    l2fwd_dst_ports[portid] = 0;
+  init_conf ();
+  create_lcore_conf ();
+  init_port_conf (&port_conf);
+  port_init (4);
+  init_fib ();
 
   /*
-   * Each logical core is assigned a dedicated TX queue on each port.
+   * Threaad Launch
    */
-  uint8_t last_port = 0;
-  unsigned nb_ports_in_mask = 0;
-  for (uint8_t portid = 0; portid < nb_ports; portid++)
-    {
-      if (nb_ports_in_mask % 2)
-        {
-          l2fwd_dst_ports[portid] = last_port;
-          l2fwd_dst_ports[last_port] = portid;
-        }
-      else
-        last_port = portid;
-
-      nb_ports_in_mask++;
-    }
-  if (nb_ports_in_mask % 2)
-    {
-      printf("Notice: odd number of ports in portmask.\n");
-      l2fwd_dst_ports[last_port] = last_port;
-    }
-
-  init_queue_conf ();
-  dump_queue_confs (lcore_queue_conf, 40);
-
-  uint8_t nb_ports_available = nb_ports;
-  for (uint8_t portid = 0; portid < nb_ports; portid++)
-    {
-      const size_t nb_rxq = 4;
-      const size_t nb_txq = rte_lcore_count();
-      printf("Initializing port %u... \n", (unsigned) portid);
-      ret = rte_eth_dev_configure (portid, nb_rxq, nb_txq, &port_conf);
-      if (ret < 0)
-        rte_exit (EXIT_FAILURE, "Cannot configure device: err=%d, port=%u\n",
-            ret, (unsigned) portid);
-
-      uint16_t nb_rxd = 128;
-      uint16_t nb_txd = 512;
-      ret = rte_eth_dev_adjust_nb_rx_tx_desc (portid, &nb_rxd, &nb_txd);
-      if (ret < 0)
-        rte_exit(EXIT_FAILURE,
-           "Cannot adjust number of descriptors: err=%d, port=%u\n",
-           ret, (unsigned) portid);
-
-      /* init one RX queue */
-      uint8_t port_socket_id = rte_eth_dev_socket_id(portid);
-      for (uint32_t q=0; q<nb_rxq; q++)
-        {
-          ret = rte_eth_rx_queue_setup (portid, q, nb_rxd,
-                     rte_eth_dev_socket_id (portid),
-                     NULL, pktmbuf_pool[port_socket_id]);
-          if (ret < 0)
-            rte_exit(EXIT_FAILURE,
-                "rte_eth_rx_queue_setup:err=%d, port=%u, queue=%u\n",
-                ret, (unsigned) portid, q);
-        }
-
-      /* init one TX queue on each port */
-      for (uint32_t q=0; q<nb_txq; q++)
-        {
-          ret = rte_eth_tx_queue_setup (portid, q, nb_txd,
-              rte_eth_dev_socket_id (portid), NULL);
-          if (ret < 0)
-            rte_exit(EXIT_FAILURE,
-                "rte_eth_tx_queue_setup:err=%d, port=%u, queue=%u\n",
-                ret, (unsigned) portid, q);
-        }
-    }
-
-  init_queue_conf_buffer_init (lcore_queue_conf);
-
-  for (uint8_t portid = 0; portid < nb_ports; portid++)
-    {
-      printf("slankdev portid=%u", portid);
-      ret = rte_eth_dev_start (portid);
-      if (ret < 0)
-        rte_exit(EXIT_FAILURE, "rte_eth_dev_start:err=%d, port=%u\n",
-            ret, (unsigned) portid);
-
-      printf("done: \n");
-      rte_eth_promiscuous_enable (portid);
-    }
-
-  if (!nb_ports_available)
-    {
-      rte_exit(EXIT_FAILURE,
-        "All available ports are disabled. Please set portmask.\n");
-    }
-
-  rte_eal_mp_remote_launch (l2fwd_launch_one_lcore, NULL, CALL_MASTER);
+  rte_eal_mp_remote_launch (launcher, NULL, CALL_MASTER);
   rte_eal_mp_wait_lcore ();
 
-  for (uint8_t portid = 0; portid < nb_ports; portid++)
-    {
-      printf ("Closing port %d...", portid);
-      rte_eth_dev_stop (portid);
-      rte_eth_dev_close (portid);
-      printf (" Done\n");
-    }
+  /*
+   * Termination
+   */
+  port_fini ();
   printf ("Bye...\n");
-
   return ret;
 }
 

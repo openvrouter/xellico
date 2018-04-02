@@ -1,6 +1,4 @@
-#ifndef __XELLICO_H_
-#define __XELLICO_H_
-
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,10 +39,8 @@
 #include <rte_mbuf.h>
 
 #define RTE_LOGTYPE_XELLICO RTE_LOGTYPE_USER1
-#define NB_MBUF   8192
 #define MAX_PKT_BURST 32
 #define BURST_TX_DRAIN_US 100 /* TX drain every ~100us */
-#define MEMPOOL_CACHE_SIZE 256
 
 static inline int
 xellico_boot_dpdk (int argc, char** argv)
@@ -76,5 +72,4 @@ rte_socket_count (void)
   return socket_count;
 }
 
-#endif /* __XELLICO_H_ */
 
