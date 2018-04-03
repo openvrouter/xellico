@@ -1,29 +1,26 @@
 
 # Benchmark of DPDK
 
-- dpdk version is v17.11 (forked from dpdk.org)
-- nic are x540 and xl710 for test
+- 目的
+	- RSSのスケーラビリティを調べる
+	- tx-bufferの有用性に関して調べる
 
-## exp1 RSS Evaluation
-
-DPDKでRSSを有効にした時のベンチマークとスケーラビリティを示す.
-
-```
-pktsize\#queues   1    2    3    4    5    6    7    8
-  64   [Mbps]
- 128   [Mbps]
- 256   [Mbps]
- 512   [Mbps]
-1024   [Mbps]
-```
-
-## exp2 Tx Buffer Evaluation
-
-Tx bufferを有効かした時のベンチマークとスケーラビリティを示す.
-
-
-
-## exp3 Bad-NUMA Evaluation
-
+- dpdk
+	- version is v17.11
+	- forked from dpdk.org
+- NIC
+	- x540 (10GbE)
+	- xl710 (40GbE)
+- forwarding
+	- 32rx/1tx w/ buffer
+	- 32rx/1tx w/o buffer
+	- 32rx/32tx w/ buffer
+	- 32rx/32tx w/o buffer
+	- 1rx/1tx w/ buffer
+	- 1rx/1tx w/o buffer
+- rss conf
+	- 1-8 queues
+- pkt size
+	- 64,128,196,256,512,1024,1518
 
 
