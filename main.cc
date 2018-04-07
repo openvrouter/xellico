@@ -19,6 +19,7 @@
 #include "forwarder.h"
 #include "force_quit.h"
 #include "port.h"
+#include "delay.h"
 
 std::vector <struct queue_conf> all_qconf;
 struct lcore_conf lcore_conf[RTE_MAX_LCORE];
@@ -57,25 +58,21 @@ create_lcore_conf (void)
 static void
 init_conf (void)
 {
+                    /*  p  q  lcore */
   all_qconf.push_back ({0, 0, 2});
   all_qconf.push_back ({1, 0, 3});
-  all_qconf.push_back ({0, 1, 4});
-  all_qconf.push_back ({1, 1, 5});
+  // all_qconf.push_back ({0, 1, 4});
+  // all_qconf.push_back ({1, 1, 5});
+  //
+  // all_qconf.push_back ({0, 2, 6});
+  // all_qconf.push_back ({1, 2, 7});
+  // all_qconf.push_back ({0, 3, 8});
+  // all_qconf.push_back ({1, 3, 9});
 
-  all_qconf.push_back ({0, 2, 6});
-  all_qconf.push_back ({1, 2, 7});
-  all_qconf.push_back ({0, 3, 8});
-  all_qconf.push_back ({1, 3, 9});
-
-  all_qconf.push_back ({0, 4, 10});
-  all_qconf.push_back ({1, 4, 11});
-  all_qconf.push_back ({0, 5, 12});
-  all_qconf.push_back ({1, 5, 13});
-
-  all_qconf.push_back ({0, 6, 14});
-  all_qconf.push_back ({1, 6, 15});
-  all_qconf.push_back ({0, 7, 16});
-  all_qconf.push_back ({1, 7, 17});
+  // all_qconf.push_back ({0, 4, 10});
+  // all_qconf.push_back ({1, 4, 11});
+  // all_qconf.push_back ({0, 5, 12});
+  // all_qconf.push_back ({1, 5, 13});
 }
 
 static void
