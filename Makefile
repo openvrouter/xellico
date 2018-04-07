@@ -2,11 +2,11 @@
 ifeq ($(RTE_SDK),)
 $(error "Please define RTE_SDK environment variable")
 endif
-CXXFLAGS += -O3 -g -std=c++11
+CXXFLAGS += -std=c++11 -g -O3
 CXXFLAGS += -I$(RTE_SDK)/$(RTE_TARGET)/include -include
 CXXFLAGS += $(RTE_SDK)/$(RTE_TARGET)/include/rte_config.h
 
-LIBS = \
+LDFLAGS = \
     -m64 -pthread -march=native \
     -Wl,--no-as-needed \
     -Wl,-export-dynamic \
@@ -23,8 +23,8 @@ SRC = lcore_conf.cc main.cc \
 			forwarder.cc force_quit.cc port.cc
 OBJ = $(SRC:.cc=.o)
 
-all: $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LIBS)
+$(TARGET): $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LDFLAGS) $(LIBS)
 
 runp:
 	sudo ./xellico
@@ -35,7 +35,7 @@ run:
 		--vdev=net_tap1,iface=tap1
 
 gdb:
-	sudo gdb ./build/xellico
+	sudo gdb ./xellico
 
 clean:
 	rm -f $(TARGET) $(OBJ)

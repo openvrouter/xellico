@@ -77,7 +77,7 @@ forwarder (void)
             {
               struct rte_mbuf *m = pkts_burst[j];
               rte_prefetch0 (rte_pktmbuf_mtod (m, void *));
-              // dirty_looped_delay (150);
+              dirty_looped_delay (150);
               l2fwd_simple_forward (m, in_portid);
             }
         }

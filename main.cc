@@ -1,12 +1,4 @@
 
-/*
- * The use of this software is limited to education, research, and evaluation
- * purposes only.  Commercial use is strictly prohibited.  For all other uses,
- * contact the author(s).
- * Copyright(c) 2018 Souta Kawahara
- * Copyright(c) 2018 Hiroki Shirokura
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
