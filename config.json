@@ -1,0 +1,9 @@
+
+{
+  "qconf": [
+    { "port_id":0, "queue_id":0, "lcore_id":2 },
+    { "port_id":1, "queue_id":0, "lcore_id":3 }
+  ],
+  "txbulk": 4
+}
+
