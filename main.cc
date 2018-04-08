@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "xellico.h"
 #include "dpdk_misc.h"
 #include "lcore_conf.h"
@@ -73,11 +74,35 @@ read_conf (const char* configfile)
   printf ("tx_buffer_size: %zd\n", tx_buffer_size);
 }
 
-static void
+static bool
 validate_conf (void)
 {
-  // TODO Impelmentation
-  return ;
+  /* Check each port's rx-queue-id
+   * is starting from 0 in order. */
+  const size_t n_port = rte_eth_dev_count ();
+  for (size_t pid=0; pid<n_port; pid++)
+    {
+      std::vector <size_t> queue_ids;
+      for (auto& qconf: all_qconf)
+        if (qconf.port_id == pid)
+          queue_ids.push_back (qconf.queue_id);
+      std::sort (queue_ids.begin (), queue_ids.end ());
+
+      auto is_in_order = [] (std::vector<size_t>& vec)
+        {
+          size_t min = *std::min_element (vec.begin (), vec.end ());
+          size_t max = *std::max_element (vec.begin (), vec.end ());
+          size_t expect_total = (min + max) * vec.size() / 2;
+          size_t actual_total = [&] { size_t c=0; for (auto v : vec) c+=v; return c; } ();
+          return actual_total == expect_total;
+        };
+
+      bool ret0 = is_in_order (queue_ids);
+      bool ret1 = queue_ids[0] == 0;
+      if (!(ret0 & ret1)) return false;
+    }
+
+  return true;
 }
 
 static int
@@ -92,7 +117,7 @@ signal_handler (int signum)
 {
   if (signum == SIGINT || signum == SIGTERM)
     {
-      printf("\n\nSignal %d received, preparing to exit...\n", signum);
+      printf ("\n\nSignal %d received, preparing to exit...\n", signum);
       force_quit = true;
     }
 }
@@ -109,7 +134,12 @@ main (int argc, char **argv)
   signal (SIGTERM, signal_handler);
 
   read_conf ("config.json");
-  validate_conf ();
+  if (!validate_conf ())
+    {
+      fprintf (stderr, "invalid configuration\n");
+      exit(1);
+    }
+
   create_lcore_conf ();
   port_init ();
   init_fib ();
