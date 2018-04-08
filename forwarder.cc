@@ -1,6 +1,6 @@
 
 #include "xellico.h"
-#include "lcore_conf.h"
+#include "config.h"
 #include "forwarder.h"
 #include "force_quit.h"
 #include "delay.h"

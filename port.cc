@@ -1,7 +1,7 @@
 
 #include <vector>
 #include "xellico.h"
-#include "lcore_conf.h"
+#include "config.h"
 #include "port.h"
 
 #define NB_MBUF 8192

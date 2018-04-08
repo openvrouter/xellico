@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "xellico.h"
 #include "dpdk_misc.h"
-#include "lcore_conf.h"
+#include "config.h"
 #include "forwarder.h"
 #include "force_quit.h"
 #include "port.h"
@@ -101,7 +101,6 @@ validate_conf (void)
       bool ret1 = queue_ids[0] == 0;
       if (!(ret0 & ret1)) return false;
     }
-
   return true;
 }
 
