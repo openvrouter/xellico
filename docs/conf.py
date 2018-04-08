@@ -110,6 +110,7 @@ htmlhelp_basename = 'DPDKperformanceoptimizationdoc'
 # -- Options for LaTeX output ------------------------------------------------
 
 latex_elements = {
+        'extraclassoptions': 'report',
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
@@ -133,8 +134,9 @@ latex_docclass = {'manual': 'jsbook'}
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'DPDKperformanceoptimization.tex', 'DPDK performance optimization Documentation',
-     'Hiroki Shirokura', 'manual'),
+    (master_doc, 'DPDKperformanceoptimization.tex',
+     'DPDK 性能最適化レポート \\\\ RSSとTxBufferに関しての詳細調査',
+     'Hiroki Shirokura @slankdev', 'manual'),
 ]
 
 
