@@ -7,7 +7,6 @@
 #define NB_MBUF 8192
 #define MEMPOOL_CACHE_SIZE 256
 
-extern std::vector <struct queue_conf> all_qconf;
 struct rte_eth_conf port_conf;
 struct rte_mempool* pktmbuf_pool[RTE_MAX_ETHPORTS];
 
@@ -47,8 +46,8 @@ static size_t
 get_nb_rxq (uint32_t port_id)
 {
   size_t cnt = 0;
-  for (size_t i=0; i<all_qconf.size(); i++) {
-    if (all_qconf[i].port_id == port_id) cnt ++;
+  for (size_t i=0; i<xeconf->all_qconf.size(); i++) {
+    if (xeconf->all_qconf[i].port_id == port_id) cnt ++;
   }
   return cnt;
 }

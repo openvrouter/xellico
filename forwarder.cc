@@ -4,9 +4,13 @@
 #include "forwarder.h"
 #include "force_quit.h"
 #include "delay.h"
+#include "config.h"
 
 uint32_t l2fwd_dst_ports[RTE_MAX_ETHPORTS];
-extern struct lcore_conf lcore_conf[RTE_MAX_LCORE];
+// extern struct lcore_conf lcore_conf[RTE_MAX_LCORE];
+
+// xellico_conf_t;
+// extern xellico_conf_t* xeconf;
 
 static inline void
 l2fwd_simple_forward (struct rte_mbuf *m, unsigned portid)
@@ -14,7 +18,7 @@ l2fwd_simple_forward (struct rte_mbuf *m, unsigned portid)
   uint32_t lcore_id = rte_lcore_id();
   unsigned dst_port = l2fwd_dst_ports[portid];
   unsigned dst_queue = lcore_id;
-  struct rte_eth_dev_tx_buffer* buffer = lcore_conf[lcore_id].tx_buffer[dst_port];
+  struct rte_eth_dev_tx_buffer* buffer = xeconf->lcore_conf[lcore_id].tx_buffer[dst_port];
   rte_eth_tx_buffer(dst_port, dst_queue, buffer, m);
 }
 
@@ -22,17 +26,17 @@ void
 forwarder (void)
 {
   unsigned lcore_id = rte_lcore_id ();
-  if (lcore_conf[lcore_id].qconf.size() == 0)
+  if (xeconf->lcore_conf[lcore_id].qconf.size() == 0)
     {
       RTE_LOG (INFO, XELLICO, " -- lcore=%u(socket%u) has nothing to do\n",
           lcore_id, rte_socket_id());
       return;
     }
 
-  for (size_t i = 0; i < lcore_conf[lcore_id].qconf.size(); i++)
+  for (size_t i = 0; i < xeconf->lcore_conf[lcore_id].qconf.size(); i++)
     {
-      uint32_t portid = lcore_conf[lcore_id].qconf[i].port_id;
-      uint32_t queueid = lcore_conf[lcore_id].qconf[i].queue_id;
+      uint32_t portid = xeconf->lcore_conf[lcore_id].qconf[i].port_id;
+      uint32_t queueid = xeconf->lcore_conf[lcore_id].qconf[i].queue_id;
       RTE_LOG (INFO, XELLICO,
           " -- lcore=%u(socket%u) portid=%u queueid=%u\n",
           lcore_id, rte_socket_id(), portid, queueid);
@@ -52,11 +56,11 @@ forwarder (void)
       uint64_t diff_tsc = cur_tsc - prev_tsc;
       if (unlikely (diff_tsc > drain_tsc))
         {
-          for (size_t i = 0; i < lcore_conf[lcore_id].qconf.size(); i++)
+          for (size_t i = 0; i < xeconf->lcore_conf[lcore_id].qconf.size(); i++)
             {
-              uint32_t dst_portid = l2fwd_dst_ports[lcore_conf[lcore_id].qconf[i].port_id];
+              uint32_t dst_portid = l2fwd_dst_ports[xeconf->lcore_conf[lcore_id].qconf[i].port_id];
               uint32_t dst_queueid = rte_lcore_id();
-              struct rte_eth_dev_tx_buffer *buffer = lcore_conf[lcore_id].tx_buffer[dst_portid];
+              struct rte_eth_dev_tx_buffer *buffer = xeconf->lcore_conf[lcore_id].tx_buffer[dst_portid];
               rte_eth_tx_buffer_flush (dst_portid, dst_queueid, buffer);
             }
           prev_tsc = cur_tsc;
@@ -65,11 +69,11 @@ forwarder (void)
       /*
        * Read packet from RX queues
        */
-      for (size_t i = 0; i < lcore_conf[lcore_id].qconf.size(); i++)
+      for (size_t i = 0; i < xeconf->lcore_conf[lcore_id].qconf.size(); i++)
         {
           struct rte_mbuf *pkts_burst[MAX_PKT_BURST];
-          uint32_t in_portid = lcore_conf[lcore_id].qconf[i].port_id;
-          uint32_t in_queueid = lcore_conf[lcore_id].qconf[i].queue_id;
+          uint32_t in_portid = xeconf->lcore_conf[lcore_id].qconf[i].port_id;
+          uint32_t in_queueid = xeconf->lcore_conf[lcore_id].qconf[i].queue_id;
           uint32_t nb_rx = rte_eth_rx_burst (in_portid,
               in_queueid, pkts_burst, MAX_PKT_BURST);
 
