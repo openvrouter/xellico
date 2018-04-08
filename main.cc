@@ -1,27 +1,24 @@
 
-/*
- * The use of this software is limited to education, research, and evaluation
- * purposes only.  Commercial use is strictly prohibited.  For all other uses,
- * contact the author(s).
- * Copyright(c) 2018 Souta Kawahara
- * Copyright(c) 2018 Hiroki Shirokura
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include "xellico.h"
 #include "dpdk_misc.h"
 #include "lcore_conf.h"
 #include "forwarder.h"
 #include "force_quit.h"
 #include "port.h"
+#include "delay.h"
+#include "json.hpp"
 
 std::vector <struct queue_conf> all_qconf;
 struct lcore_conf lcore_conf[RTE_MAX_LCORE];
+size_t tx_buffer_size;
 
 static void
 create_lcore_conf (void)
@@ -48,34 +45,32 @@ create_lcore_conf (void)
             rte_exit(EXIT_FAILURE, "Cannot allocate buffer for tx on port %u\n",
                 (unsigned) pid);
 
-          rte_eth_tx_buffer_init (txbuff, MAX_PKT_BURST);
+          rte_eth_tx_buffer_init (txbuff, tx_buffer_size);
           lcore_conf[i].tx_buffer[pid] = txbuff;
         }
     }
 }
 
 static void
-init_conf (void)
+read_conf (const char* configfile)
 {
-  all_qconf.push_back ({0, 0, 2});
-  all_qconf.push_back ({1, 0, 3});
-  all_qconf.push_back ({0, 1, 4});
-  all_qconf.push_back ({1, 1, 5});
+  std::ifstream f (configfile);
+  nlohmann::json json;
+  f >> json;
 
-  all_qconf.push_back ({0, 2, 6});
-  all_qconf.push_back ({1, 2, 7});
-  all_qconf.push_back ({0, 3, 8});
-  all_qconf.push_back ({1, 3, 9});
+  const size_t n_qconf = json["qconf"].size ();
+  for (size_t i=0; i<n_qconf; i++)
+    {
+      auto ele = json["qconf"][i];
+      auto port_id = ele["port_id"].get<uint32_t> ();
+      auto queue_id = ele["queue_id"].get<uint32_t> ();
+      auto lcore_id = ele["lcore_id"].get<uint32_t> ();
+      printf ("(%u,%u,%u)\n", port_id, queue_id, lcore_id);
 
-  all_qconf.push_back ({0, 4, 10});
-  all_qconf.push_back ({1, 4, 11});
-  all_qconf.push_back ({0, 5, 12});
-  all_qconf.push_back ({1, 5, 13});
-
-  all_qconf.push_back ({0, 6, 14});
-  all_qconf.push_back ({1, 6, 15});
-  all_qconf.push_back ({0, 7, 16});
-  all_qconf.push_back ({1, 7, 17});
+      all_qconf.push_back ({port_id, queue_id, lcore_id});
+    }
+  tx_buffer_size = json["txbulk"].get<size_t> ();
+  printf ("tx_buffer_size: %zd\n", tx_buffer_size);
 }
 
 static void
@@ -113,7 +108,7 @@ main (int argc, char **argv)
   signal (SIGINT, signal_handler);
   signal (SIGTERM, signal_handler);
 
-  init_conf ();
+  read_conf ("config.json");
   validate_conf ();
   create_lcore_conf ();
   port_init ();

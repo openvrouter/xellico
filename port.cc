@@ -110,7 +110,6 @@ port_init (void)
 
   for (uint8_t portid = 0; portid < nb_ports; portid++)
     {
-      printf("slankdev portid=%u", portid);
       int ret = rte_eth_dev_start (portid);
       if (ret < 0)
         rte_exit(EXIT_FAILURE, "rte_eth_dev_start:err=%d, port=%u\n",
