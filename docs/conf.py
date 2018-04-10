@@ -22,10 +22,7 @@
 project = 'DPDK performance optimization'
 copyright = '2018, Hiroki Shirokura'
 author = 'Hiroki Shirokura'
-
-# The short X.Y version
 version = ''
-# The full version, including alpha/beta/rc tags
 release = '0'
 
 
@@ -110,22 +107,10 @@ htmlhelp_basename = 'DPDKperformanceoptimizationdoc'
 # -- Options for LaTeX output ------------------------------------------------
 
 latex_elements = {
-        'extraclassoptions': 'report',
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
+    'extraclassoptions': 'report',
+    'papersize': 'a4paper',
+    'pointsize': '10pt',
+    'preamble': '',
 }
 
 latex_docclass = {'manual': 'jsbook'}

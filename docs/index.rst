@@ -17,7 +17,6 @@ DPDK performance optimization
   preparation
   txbuffer
   rss
-  featurework
   acknowledgement
 
 
