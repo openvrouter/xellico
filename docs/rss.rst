@@ -3,11 +3,17 @@ RSSに関する情報調査
 ===================
 
 ここではRSS(Receive Side Scaling)に関する調査報告を行う.
+
+RSSとは
+-------
+
 RSSに関しては, Takuya Asada (syuu1228)氏のブログの記事が参考になるため,
 そちらを参考にしてほしい.
 
-- [参考] Takuya Asada, Linuxのネットワークスタックのスケーラビリティについて, http://syuu1228.hatenablog.com/entry/20101210/1291941459
-- [参考] Receive-Side Scalingについての調査メモ, http://syuu1228.hatenablog.com/entry/20101219/1292725423
+- [参考] Takuya Asada, Linuxのネットワークスタックのスケーラビリティについて,
+  http://syuu1228.hatenablog.com/entry/20101210/1291941459
+- [参考] Receive-Side Scalingについての調査メモ,
+  http://syuu1228.hatenablog.com/entry/20101219/1292725423
 
 DPDKで高速なVNFを実装する場合, 40GbE以上のパケット転送を行う場合には,
 RSSを用いることが定石である. ここでは, その方法とスケーラビリティに
@@ -23,18 +29,16 @@ Xellicoはconfigファイルにより, RSSのコンフィグレーションを�
 できるため, 本節もソースコードの編集は行わずに, configとなるJSONファイル
 の編集のみをおこなった.
 
-実験方法
----------
+DPDKでの設定方法
+----------------
 
-固定パラメータ
-- Tx Buffer
+チューニングパラメータ
+----------------------
 
-変動パラメータ
 - RSS number of Queues
-- packet size
 
-実験結果
---------
+ベンチマーク結果
+----------------
 
 - x540の場合, RSSはリニアにスケールする (dummy)
 - xl710の場合, RSSはリニアにはスケールしない(dummy) (HW限界)
@@ -45,7 +49,6 @@ Xellicoはconfigファイルにより, RSSのコンフィグレーションを�
   :name: rss_result
 
   RSSの性能計測結果　
-
 
 考察
 ----

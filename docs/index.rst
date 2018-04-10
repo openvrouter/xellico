@@ -14,9 +14,9 @@ DPDK performance optimization
   references
   environment
   vrouter
+  preparation
   txbuffer
   rss
-  featurework
   acknowledgement
 
 
