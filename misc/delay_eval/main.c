@@ -53,11 +53,12 @@ static int
 func (__attribute__((unused)) void *arg)
 {
   printf ("freq: %zd\n", rte_get_tsc_hz ());
-  size_t trycnt = 100 * MEGA;
-  /* test_rte_delay_us_block (1, trycnt); */
-  /* test_rte_delay_us_block (2, trycnt); */
-  /* test_rte_delay_us_block (3, trycnt); */
-  /* test_rte_delay_us_block (4, trycnt); */
+  size_t trycnt = MEGA;
+  test_rte_delay_us_block (1, trycnt);
+  test_rte_delay_us_block (2, trycnt);
+  test_rte_delay_us_block (3, trycnt);
+  test_rte_delay_us_block (4, trycnt);
+  trycnt = 100 * MEGA;
   test_dirty_looped_delay_10ns (1, trycnt);
   test_dirty_looped_delay_10ns (2, trycnt);
   test_dirty_looped_delay_10ns (3, trycnt);
