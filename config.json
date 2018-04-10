@@ -2,13 +2,7 @@
 {
   "qconf": [
     { "port_id":0, "queue_id":0, "lcore_id":2 },
-    { "port_id":1, "queue_id":0, "lcore_id":3 },
-    { "port_id":0, "queue_id":1, "lcore_id":4 },
-    { "port_id":1, "queue_id":1, "lcore_id":5 },
-    { "port_id":0, "queue_id":2, "lcore_id":6 },
-    { "port_id":1, "queue_id":2, "lcore_id":7 },
-    { "port_id":0, "queue_id":3, "lcore_id":8 },
-    { "port_id":1, "queue_id":3, "lcore_id":9 }
+    { "port_id":1, "queue_id":0, "lcore_id":3 }
   ],
   "txbulk": 16
 }
