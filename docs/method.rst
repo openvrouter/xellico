@@ -33,6 +33,7 @@ TimeStampClockを用いてDPDKの関数のマイクロレイテンシを計測�
   method_environment
   method_xellico
   method_delay
+  method_dpdkfunc
   method_rss
   method_txbuffer
 
