@@ -28,13 +28,9 @@ TimeStampClockを用いてDPDKの関数のマイクロレイテンシを計測�
 
 .. toctree::
   :maxdepth: 1
-  :caption: Contents:
 
   method_environment
   method_xellico
-  method_delay
-  method_dpdkfunc
-  method_rss
-  method_txbuffer
+  method_eval
 
 

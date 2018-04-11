@@ -5,7 +5,6 @@
 
 .. toctree::
   :maxdepth: 1
-  :caption: Contents:
 
   result_delay
   result_dpdkfunc

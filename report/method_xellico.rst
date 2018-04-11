@@ -1,6 +1,6 @@
 
 Xellico vRouterによる計測
--------------------------
+=========================
 
 本レポートで取得したデータは, Xellicoというソフトウェアルータを用いた.
 Xellicoは筆者が開発しているDPDKのソフトウェアルータとして参照実装を
@@ -12,7 +12,7 @@ XellicoはGithubでOSSとして開発しており, https://github.com/slankdev/x
 本説では, Xellicoの設計と実装に関して簡単に説明を行う.
 
 設計
-^^^^^
+----
 
 まずは, 設計について説明する. XellicoはRun to Completionモデルで
 実装されており, NICのRSSを用いて同じ役割のスレッドを多重に並列動作させる.
@@ -23,12 +23,15 @@ XellicoはGithubでOSSとして開発しており, https://github.com/slankdev/x
 
   Xellicoのスレッドモデル
 
+configファイルによる設定
+------------------------
+
+xellicoはjsonファイルを用いて設定を行うことができる.
+設定項目は現在はRSS, TxBufferの二種類を構成可能である.
+
 Xellicoは実行時にconfigを入力することで動作を調節することができる.
 configで設定可能な項目は以下のものがある. configは実行時引数の
 ``-f <filename>`` で指定可能である.
-
-- RSSの構成 (# of rx-queue)
-- Tx Bufferの構成 (# of bulk tx)
 
 サンプルのconfigファイルを以下に示す.
 このファイルは各ポートのRx Queueの数を4に設定し, 32bulk Transmissionを
@@ -36,6 +39,13 @@ configで設定可能な項目は以下のものがある. configは実行時引
 
 .. code-block:: none
 
-  nrxq : 4
-  btx : 32
+  {
+    "qconf": [
+      { "port_id":0, "queue_id":0, "lcore_id":2 },
+      { "port_id":1, "queue_id":0, "lcore_id":3 },
+      { "port_id":0, "queue_id":1, "lcore_id":4 },
+      { "port_id":1, "queue_id":1, "lcore_id":5 }
+    ],
+    "txbulk": 16
+  }
 
