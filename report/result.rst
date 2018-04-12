@@ -8,7 +8,7 @@
 
   result_delay
   result_dpdkfunc
-  result_rss
   result_txbuffer
+  result_rss
 
 

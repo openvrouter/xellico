@@ -7,7 +7,7 @@
 
   experiment_delay
   experiment_dpdkfunc
-  experiment_rss
   experiment_txbuffer
+  experiment_rss
 
 

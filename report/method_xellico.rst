@@ -20,6 +20,7 @@ XellicoはGithubでOSSとして開発しており, https://github.com/slankdev/x
 
 .. figure:: img/threadmodel.png
   :name: threadmodel
+  :width: 60%
 
   Xellicoのスレッドモデル
 
