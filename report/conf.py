@@ -21,7 +21,7 @@
 
 project = 'DPDK performance optimization'
 copyright = '2018, Hiroki Shirokura'
-author = 'Hiroki Shirokura'
+author = 'Hiroki Shirokura, Souta Kawahara'
 version = ''
 release = '0'
 
@@ -121,7 +121,7 @@ latex_docclass = {'manual': 'jsbook'}
 latex_documents = [
     (master_doc, 'DPDKperformanceoptimization.tex',
      'DPDK 性能最適化レポート \\\\ RSSとTxBufferに関しての詳細調査',
-     'Hiroki Shirokura @slankdev', 'manual'),
+     'Hiroki Shirokura @slankdev\\\\Souta Kawahara @khwarizmi', 'manual'),
 ]
 
 
