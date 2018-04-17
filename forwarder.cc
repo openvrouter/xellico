@@ -7,10 +7,6 @@
 #include "config.h"
 
 uint32_t l2fwd_dst_ports[RTE_MAX_ETHPORTS];
-// extern struct lcore_conf lcore_conf[RTE_MAX_LCORE];
-
-// xellico_conf_t;
-// extern xellico_conf_t* xeconf;
 
 static inline void
 l2fwd_simple_forward (struct rte_mbuf *m, unsigned portid)

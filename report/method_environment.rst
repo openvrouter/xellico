@@ -36,11 +36,12 @@ pktgen-dpdkを動作させた.
   RAM           , DDR4 32GB
   HyperThreading, Disabled
 
-性能計測時は :numref:`pnw` に示す通りに接続して検証をおこなった.
+性能計測時は以下に示す通りに接続して検証をおこなった.
 
-.. figure:: img/evaluation_network.png
-	:name: pnw
+.. figure:: img/evalnw.png
+  :width: 60%
 
 	実験環境の物理ネットワーク
+
 
 
