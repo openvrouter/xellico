@@ -46,5 +46,19 @@ dirty_looped_delay_10ns関数の評価結果を示す.
   30, 59, 32, (未計測)
   40, 86, 47, (未計測)
 
+実験結果のグラフを :numref:`delay_us_latency` ,
+:numref:`delay_ns_latency` に示す.
+
+.. figure:: img/delay_us_latency.png
+  :name: delay_us_latency
+
+  マイクロ秒遅延
+
+
+.. figure:: img/delay_ns_latency.png
+  :name: delay_ns_latency
+
+  ナノ秒遅延
+
 
 
