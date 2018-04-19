@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import math, sys
 import numpy as np
+import matplotlib.ticker as tick
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 from pprint import pprint
@@ -17,7 +18,11 @@ def exp_delay():
         plt.ylabel('latency [usec]')
         plt.xlabel('delay[usec]')
         plt.xticks(range(len(idx)), idx)
-        plt.plot(lat)
+        plt.gca().xaxis.set_minor_locator(tick.MultipleLocator(1))
+        plt.gca().yaxis.set_minor_locator(tick.MultipleLocator(1))
+        plt.grid(which='minor')
+        plt.plot(lat, label='actual')
+        plt.plot(idx, label='ideal')
         plt.legend()
         plt.savefig(outfile)
     inside('delay_us_latency.csv', 'delay_us_latency.png')
