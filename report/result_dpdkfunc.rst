@@ -24,8 +24,8 @@ rxburst
 
   rte_eth_rx_burstの遅延
 
-txburst
--------
+txbuffer_flush
+---------------
 
 .. csv-table::
   :header: #burst, tx(none), tx(64byte), tx(512byte), tx(1514byte)
@@ -53,4 +53,6 @@ txbufferはshotでしか送ることができない.
 .. figure:: img/txbuffer_delay.png
   :name: txbuffer_delay
 
-  txburstの遅延
+  txbufferの遅延
+
+

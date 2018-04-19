@@ -58,7 +58,23 @@ forwarder (void)
               uint32_t dst_portid = l2fwd_dst_ports[xeconf->lcore_conf[lcore_id].qconf[i].port_id];
               uint32_t dst_queueid = rte_lcore_id();
               struct rte_eth_dev_tx_buffer *buffer = xeconf->lcore_conf[lcore_id].tx_buffer[dst_portid];
+
+#if 1
+              static size_t sum = 0, cnt = 0;
+              size_t before = rte_rdtsc ();
+#endif
               rte_eth_tx_buffer_flush (dst_portid, dst_queueid, buffer);
+#if 1
+              sum += rte_rdtsc () - before;
+              cnt ++;
+              if (cnt > 1000*10)
+                {
+                  size_t lat_clk = sum / cnt;
+                  printf ("lat: %zd [clock] on lcore%u\n", lat_clk, rte_lcore_id ());
+                  sum = 0;
+                  cnt = 0;
+                }
+#endif
             }
           prev_tsc = cur_tsc;
         }
@@ -71,25 +87,8 @@ forwarder (void)
           struct rte_mbuf *pkts_burst[n_burst];
           uint32_t in_portid = xeconf->lcore_conf[lcore_id].qconf[i].port_id;
           uint32_t in_queueid = xeconf->lcore_conf[lcore_id].qconf[i].queue_id;
-
-#if 1
-          static size_t sum = 0, cnt = 0;
-          size_t before = rte_rdtsc ();
-#endif
           uint32_t nb_rx = rte_eth_rx_burst (in_portid,
               in_queueid, pkts_burst, n_burst);
-#if 1
-          sum += rte_rdtsc () - before;
-          cnt ++;
-          if (cnt > 1000*1000*10)
-            {
-              size_t lat_clk = sum / cnt;
-              printf ("rxburst lat: %zd [clock] on lcore%u\n", lat_clk, rte_lcore_id ());
-              sum = 0;
-              cnt = 0;
-            }
-#endif
-
           for (size_t j = 0; j < nb_rx; j++)
             {
               struct rte_mbuf *m = pkts_burst[j];
