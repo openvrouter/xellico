@@ -25,11 +25,14 @@ test_dirty_looped_delay_10ns (size_t nsec, size_t trycnt)
       dirty_looped_delay_10ns (nsec);
       sum += rte_get_tsc_cycles () - before;
     }
-  size_t latency = sum/trycnt;
   size_t hz = rte_get_tsc_hz ();
-  printf ("dirty_looped_delay_10ns(%zd): "
-          " lat=%zd [clk] try=%zd, delay=%zdns\n",
-          nsec, latency, trycnt, GIGA*latency/hz);
+  size_t lat_clk = sum/trycnt;
+  double lat_ns = ((double)lat_clk*GIGA)/hz;
+  double accr = lat_ns / nsec / 10;
+
+        /* dely, lat_clk, lat_ns, accur*/
+  printf ("%10zd, %10zd, %10lf, %10lf\n",
+          nsec*10, lat_clk, lat_ns, accr);
 }
 
 static void
@@ -42,27 +45,49 @@ test_rte_delay_us_block (size_t usec, size_t trycnt)
       rte_delay_us_block (usec);
       sum += rte_get_tsc_cycles () - before;
     }
-  size_t latency = sum/trycnt;
+
   size_t hz = rte_get_tsc_hz ();
-  printf ("rte_delay_us_block(%zd): "
-          " lat=%zd [clk] try=%zd, delay=%zdus\n",
-          usec, latency, trycnt, MEGA*latency/hz);
+  size_t lat_clk = sum/trycnt;
+  double lat_us = (double)(lat_clk)/hz*MEGA;
+  double accr = lat_us / usec;
+
+        /* dely, lat_clk, lat_us, accur*/
+  printf ("%10zd, %10zd, %10lf, %10lf\n",
+          usec, lat_clk, lat_us, accr);
 }
 
 static int
 func (__attribute__((unused)) void *arg)
 {
-  printf ("freq: %zd\n", rte_get_tsc_hz ());
+  printf ("freq: %zd\n\n", rte_get_tsc_hz ());
   size_t trycnt = MEGA;
+
+  printf ("#%9s, %10s, %10s, %10s\n",
+      "dly[us]", "clk", "latency", "accur");
   test_rte_delay_us_block (1, trycnt);
   test_rte_delay_us_block (2, trycnt);
   test_rte_delay_us_block (3, trycnt);
   test_rte_delay_us_block (4, trycnt);
-  trycnt = 100 * MEGA;
+  test_rte_delay_us_block (5, trycnt);
+  test_rte_delay_us_block (6, trycnt);
+  test_rte_delay_us_block (7, trycnt);
+  test_rte_delay_us_block (8, trycnt);
+  test_rte_delay_us_block (9, trycnt);
+  test_rte_delay_us_block (10, trycnt);
+
+  trycnt = MEGA;
+  printf ("#%9s, %10s, %10s, %10s\n",
+      "dly[ns]", "clk", "latency", "accur");
   test_dirty_looped_delay_10ns (1, trycnt);
   test_dirty_looped_delay_10ns (2, trycnt);
   test_dirty_looped_delay_10ns (3, trycnt);
   test_dirty_looped_delay_10ns (4, trycnt);
+  test_dirty_looped_delay_10ns (5, trycnt);
+  test_dirty_looped_delay_10ns (6, trycnt);
+  test_dirty_looped_delay_10ns (7, trycnt);
+  test_dirty_looped_delay_10ns (8, trycnt);
+  test_dirty_looped_delay_10ns (9, trycnt);
+  test_dirty_looped_delay_10ns (10, trycnt);
 	return 0;
 }
 
