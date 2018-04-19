@@ -61,39 +61,42 @@ def exp_dpdkfunc():
     plt.legend()
     plt.savefig('txbuffer_delay.png')
 
+def blackbox_inside(inname, outname):
+    data = np.loadtxt(inname,
+        delimiter=",", comments="#")
+    idx = data[:,0]
+    tp64 = data[:,1]
+    tp128 = data[:,2]
+    tp192 = data[:,3]
+    tp256 = data[:,4]
+    tp512 = data[:,5]
+    tp1024 = data[:,6]
+    tp1514 = data[:,7]
+    plt.clf()
+    plt.ylabel('performance [Mbps or nsec]')
+    plt.xlabel('# of rx-queues')
+    plt.xticks(range(len(idx)), idx)
+    plt.plot(tp64, label='pktsize=64')
+    plt.plot(tp128, label='pktsize=128')
+    plt.plot(tp192, label='pktsize=192')
+    plt.plot(tp256, label='pktsize=256')
+    plt.plot(tp256, label='pktsize=512')
+    plt.plot(tp1024, label='pktsize=1024')
+    plt.plot(tp1514, label='pktsize=1514')
+    plt.legend()
+    plt.savefig(outname)
+
 
 def exp_rss():
     print("rss")
-    def inside(inname, outname):
-        data = np.loadtxt(inname,
-            delimiter=",", comments="#")
-        idx = data[:,0]
-        tp64 = data[:,1]
-        tp128 = data[:,2]
-        tp192 = data[:,3]
-        tp256 = data[:,4]
-        tp512 = data[:,5]
-        tp1024 = data[:,6]
-        tp1514 = data[:,7]
-        plt.clf()
-        plt.ylabel('performance [Mbps or nsec]')
-        plt.xlabel('# of rx-queues')
-        plt.xticks(range(len(idx)), idx)
-        plt.plot(tp64, label='pktsize=64')
-        plt.plot(tp128, label='pktsize=128')
-        plt.plot(tp192, label='pktsize=192')
-        plt.plot(tp256, label='pktsize=256')
-        plt.plot(tp256, label='pktsize=512')
-        plt.plot(tp1024, label='pktsize=1024')
-        plt.plot(tp1514, label='pktsize=1514')
-        plt.legend()
-        plt.savefig(outname)
-    inside('rss_throughput.csv', 'rss_throughput.png')
-    inside('rss_latency.csv', 'rss_latency.png')
+    blackbox_inside('rss_throughput.csv', 'rss_throughput.png')
+    blackbox_inside('rss_latency.csv', 'rss_latency.png')
 
 
 def exp_txbuffer():
     print("txbuffer")
+    blackbox_inside('bulktx_throughput.csv', 'bulktx_throughput.png')
+    blackbox_inside('bulktx_latency.csv', 'bulktx_latency.png')
 
 
 def main():
