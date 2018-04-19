@@ -35,4 +35,12 @@
 次にtxbufferの結果を示す.
 txbufferはshotでしか送ることができない.
 
+.. csv-table::
+  :header: pktsize, latency
+  :widths: 1, 1
+  :file: img/txbuffer_delay.csv
 
+.. figure:: img/txbuffer_delay.png
+  :name: txbuffer_delay
+
+  txburstの遅延
