@@ -35,20 +35,18 @@ def exp_dpdkfunc():
         data = np.loadtxt(infile,
             delimiter=',', comments='#')
         idx = data[:,0]
-        siz64 = data[:,1]
-        siz128 = data[:,2]
-        siz256 = data[:,3]
-        siz512 = data[:,4]
-        siz1024 = data[:,5]
+        siz0 = data[:,1]
+        siz64 = data[:,2]
+        siz512 = data[:,3]
+        siz1514 = data[:,4]
         plt.clf()
         plt.ylabel('latency [clock]')
         plt.xlabel('# of burst')
         plt.xticks(range(len(idx)), idx)
+        plt.plot(siz0, label='pktsize=0')
         plt.plot(siz64, label='pktsize=64')
-        plt.plot(siz128, label='pktsize=128')
-        plt.plot(siz256, label='pktsize=256')
         plt.plot(siz512, label='pktsize=512')
-        plt.plot(siz1024, label='pktsize=1024')
+        plt.plot(siz1514, label='pktsize=1514')
         plt.legend()
         plt.savefig(outfile)
     inside('rxburst_delay.csv', 'rxburst_delay.png')

@@ -9,15 +9,13 @@
 
 以下にrxburstの遅延結果を表で示す.
 
-.. csv-table::
-  :header: #burst, rx(64byte), rx(128byte), rx(256byte), rx(512byte), rx(1024byte)
-  :widths: 1, 1, 1, 1, 1, 1
-  :file: img/rxburst_delay.csv
+rxburst
+-------
 
 .. csv-table::
-  :header: #burst, tx(64byte), tx(128byte), tx(256byte), tx(512byte), tx(1024byte)
-  :widths: 1, 1, 1, 1, 1, 1
-  :file: img/txburst_delay.csv
+  :header: #burst, rx(none), rx(64byte), rx(512byte), rx(1514byte)
+  :widths: 1, 1, 1, 1, 1
+  :file: img/rxburst_delay.csv
 
 上記の内容を図として示す.
 
@@ -26,11 +24,23 @@
 
   rte_eth_rx_burstの遅延
 
+txburst
+-------
+
+.. csv-table::
+  :header: #burst, tx(none), tx(64byte), tx(512byte), tx(1514byte)
+  :widths: 1, 1, 1, 1, 1
+  :file: img/txburst_delay.csv
+
+上記の内容を図として示す.
+
 .. figure:: img/txburst_delay.png
   :name: txburst_delay
 
   rte_eth_tx_burstの遅延
 
+txbuffer
+--------
 
 次にtxbufferの結果を示す.
 txbufferはshotでしか送ることができない.
