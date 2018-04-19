@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
+#include <thread>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -32,6 +33,15 @@ signal_handler (int signum)
     {
       printf ("\n\nSignal %d received, preparing to exit...\n", signum);
       force_quit = true;
+    }
+}
+
+void debug (void)
+{
+  while (!force_quit)
+    {
+      dump_pktmbuf_pool ();
+      sleep (1);
     }
 }
 

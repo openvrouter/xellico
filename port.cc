@@ -10,6 +10,28 @@
 struct rte_eth_conf port_conf;
 struct rte_mempool* pktmbuf_pool[RTE_MAX_ETHPORTS];
 
+static void
+rte_mempool_dump (rte_mempool* mp)
+{
+  printf("name     : %s \n", mp->name);
+  printf("socket_id: %u \n", mp->socket_id);
+  printf("size     : %u (using %.0f%%) \n", mp->size,
+      rte_mempool_in_use_count(mp)/float(mp->size)*100);
+  printf("in-use   : %u \n", rte_mempool_in_use_count(mp));
+  printf("avail    : %u \n", rte_mempool_avail_count(mp));
+}
+
+void
+dump_pktmbuf_pool (void)
+{
+  const size_t n_port = rte_eth_dev_count ();
+  for (size_t i=0; i<n_port; i++)
+    {
+      rte_mempool_dump (pktmbuf_pool[i]);
+      printf ("----------------------\n");
+    }
+}
+
 void
 init_port_conf (struct rte_eth_conf* conf)
 {

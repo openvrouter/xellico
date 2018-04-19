@@ -5,6 +5,6 @@
     { "port_id":1, "queue_id":0, "lcore_id":3 }
   ],
   "txbulk": 16,
-  "rxbulk": 4
+  "rxbulk": 16
 }
 
