@@ -22,6 +22,7 @@ void
 forwarder (void)
 {
   unsigned lcore_id = rte_lcore_id ();
+  const size_t n_burst = xeconf->rx_burst_size;
   if (xeconf->lcore_conf[lcore_id].qconf.size() == 0)
     {
       RTE_LOG (INFO, XELLICO, " -- lcore=%u(socket%u) has nothing to do\n",
@@ -67,11 +68,27 @@ forwarder (void)
        */
       for (size_t i = 0; i < xeconf->lcore_conf[lcore_id].qconf.size(); i++)
         {
-          struct rte_mbuf *pkts_burst[MAX_PKT_BURST];
+          struct rte_mbuf *pkts_burst[n_burst];
           uint32_t in_portid = xeconf->lcore_conf[lcore_id].qconf[i].port_id;
           uint32_t in_queueid = xeconf->lcore_conf[lcore_id].qconf[i].queue_id;
+
+#if 1
+          static size_t sum = 0, cnt = 0;
+          size_t before = rte_rdtsc ();
+#endif
           uint32_t nb_rx = rte_eth_rx_burst (in_portid,
-              in_queueid, pkts_burst, MAX_PKT_BURST);
+              in_queueid, pkts_burst, n_burst);
+#if 1
+          sum += rte_rdtsc () - before;
+          cnt ++;
+          if (cnt > 1000*1000*10)
+            {
+              size_t lat_clk = sum / cnt;
+              printf ("rxburst lat: %zd [clock] on lcore%u\n", lat_clk, rte_lcore_id ());
+              sum = 0;
+              cnt = 0;
+            }
+#endif
 
           for (size_t j = 0; j < nb_rx; j++)
             {

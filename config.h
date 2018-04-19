@@ -20,6 +20,7 @@ typedef struct xellico_conf
   std::vector <struct queue_conf> all_qconf;
   struct lcore_conf lcore_conf[RTE_MAX_LCORE];
   size_t tx_buffer_size;
+  size_t rx_burst_size;
 } xellico_conf_t;
 
 extern xellico_conf_t* xeconf;

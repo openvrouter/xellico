@@ -29,7 +29,9 @@ read_conf (const char* configfile, xellico_conf_t* xeconf)
       xeconf->all_qconf.push_back ({port_id, queue_id, lcore_id});
     }
   xeconf->tx_buffer_size = json["txbulk"].get<size_t> ();
+  xeconf->rx_burst_size = json["rxbulk"].get<size_t> ();
   printf ("tx_buffer_size: %zd\n", xeconf->tx_buffer_size);
+  printf ("rx_burst_size: %zd\n", xeconf->rx_burst_size);
 }
 
 static bool
@@ -82,7 +84,7 @@ create_lcore_conf (xellico_conf_t* xeconf)
         {
           struct rte_eth_dev_tx_buffer* txbuff = (struct rte_eth_dev_tx_buffer*)
             rte_zmalloc_socket ("tx_buffer",
-              RTE_ETH_TX_BUFFER_SIZE (MAX_PKT_BURST), 0,
+              RTE_ETH_TX_BUFFER_SIZE (xeconf->rx_burst_size), 0,
               rte_eth_dev_socket_id (pid));
           if (txbuff == NULL)
             rte_exit(EXIT_FAILURE, "Cannot allocate buffer for tx on port %u\n",

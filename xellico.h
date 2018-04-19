@@ -39,7 +39,6 @@
 #include <rte_mbuf.h>
 
 #define RTE_LOGTYPE_XELLICO RTE_LOGTYPE_USER1
-#define MAX_PKT_BURST 32
 #define BURST_TX_DRAIN_US 100 /* TX drain every ~100us */
 
 static inline int
