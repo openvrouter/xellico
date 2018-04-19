@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 from pprint import pprint
 
+
 def exp_delay():
     print('delay')
     def inside(infile, outfile):
@@ -61,13 +62,39 @@ def exp_dpdkfunc():
     plt.savefig('txbuffer_delay.png')
 
 
-
-
 def exp_rss():
     print("rss")
+    def inside(inname, outname):
+        data = np.loadtxt(inname,
+            delimiter=",", comments="#")
+        idx = data[:,0]
+        tp64 = data[:,1]
+        tp128 = data[:,2]
+        tp192 = data[:,3]
+        tp256 = data[:,4]
+        tp512 = data[:,5]
+        tp1024 = data[:,6]
+        tp1514 = data[:,7]
+        plt.clf()
+        plt.ylabel('performance [Mbps or nsec]')
+        plt.xlabel('# of rx-queues')
+        plt.xticks(range(len(idx)), idx)
+        plt.plot(tp64, label='pktsize=64')
+        plt.plot(tp128, label='pktsize=128')
+        plt.plot(tp192, label='pktsize=192')
+        plt.plot(tp256, label='pktsize=256')
+        plt.plot(tp256, label='pktsize=512')
+        plt.plot(tp1024, label='pktsize=1024')
+        plt.plot(tp1514, label='pktsize=1514')
+        plt.legend()
+        plt.savefig(outname)
+    inside('rss_throughput.csv', 'rss_throughput.png')
+    inside('rss_latency.csv', 'rss_latency.png')
+
 
 def exp_txbuffer():
     print("txbuffer")
+
 
 def main():
     exp_delay()
@@ -75,6 +102,7 @@ def main():
     exp_rss()
     exp_txbuffer()
     return
+
 
 if __name__ == '__main__':
     main()
