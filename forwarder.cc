@@ -55,16 +55,18 @@ forwarder (void)
         {
           for (size_t i = 0; i < xeconf->lcore_conf[lcore_id].qconf.size(); i++)
             {
-              uint32_t dst_portid = l2fwd_dst_ports[xeconf->lcore_conf[lcore_id].qconf[i].port_id];
+              uint32_t dst_portid =
+                l2fwd_dst_ports[xeconf->lcore_conf[lcore_id].qconf[i].port_id];
               uint32_t dst_queueid = rte_lcore_id();
-              struct rte_eth_dev_tx_buffer *buffer = xeconf->lcore_conf[lcore_id].tx_buffer[dst_portid];
+              struct rte_eth_dev_tx_buffer *buffer =
+                xeconf->lcore_conf[lcore_id].tx_buffer[dst_portid];
 
-#if 1
+#if 0
               static size_t sum = 0, cnt = 0;
               size_t before = rte_rdtsc ();
 #endif
               rte_eth_tx_buffer_flush (dst_portid, dst_queueid, buffer);
-#if 1
+#if 0
               sum += rte_rdtsc () - before;
               cnt ++;
               if (cnt > 1000*10)
@@ -94,7 +96,7 @@ forwarder (void)
               struct rte_mbuf *m = pkts_burst[j];
               rte_prefetch0 (rte_pktmbuf_mtod (m, void *));
               // dirty_looped_delay (150);
-              // rte_delay_us_block (1);
+              rte_delay_us_block (1);
               l2fwd_simple_forward (m, in_portid);
             }
         }
