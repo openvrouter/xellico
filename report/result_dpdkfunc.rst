@@ -32,7 +32,10 @@ txbuffer_flush
   :widths: 1, 1, 1, 1, 1
   :file: img/txburst_delay.csv
 
-上記の内容を図として示す.
+上記の値は計測中にある程度ばらつきがあった.
+上記の内容を図として示す. rxburstのサイズは32で固定値として実験をした.
+txburstを32より多くすることで性能が変わらないとしたら, rxburstsize=32
+が原因であると考えられる.
 
 .. figure:: img/txburst_delay.png
   :name: txburst_delay
