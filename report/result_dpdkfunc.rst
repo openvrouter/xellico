@@ -53,9 +53,5 @@ txbufferはshotでしか送ることができない.
   :widths: 1, 1
   :file: img/txbuffer_delay.csv
 
-.. figure:: img/txbuffer_delay.png
-  :name: txbuffer_delay
-
-  txbufferの遅延
 
 

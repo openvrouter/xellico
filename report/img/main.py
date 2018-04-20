@@ -52,17 +52,17 @@ def exp_dpdkfunc():
     inside('rxburst_delay.csv', 'rxburst_delay.png')
     inside('txburst_delay.csv', 'txburst_delay.png')
 
-    data = np.loadtxt('txbuffer_delay.csv',
-            delimiter=",", comments="#")
-    idx = data[:,0]
-    delays = data[:,1]
-    plt.clf()
-    plt.ylabel('latency [clock]')
-    plt.xlabel('pkt size [bytes]')
-    plt.xticks(range(len(idx)), idx)
-    plt.plot(delays)
-    plt.legend()
-    plt.savefig('txbuffer_delay.png')
+    # data = np.loadtxt('txbuffer_delay.csv',
+    #         delimiter=",", comments="#")
+    # idx = data[:,0]
+    # delays = data[:,1]
+    # plt.clf()
+    # plt.ylabel('latency [clock]')
+    # plt.xlabel('pkt size [bytes]')
+    # plt.xticks(range(len(idx)), idx)
+    # plt.plot(delays)
+    # plt.legend()
+    # plt.savefig('txbuffer_delay.png')
 
 def blackbox_inside(inname, outname):
     data = np.loadtxt(inname,
