@@ -49,17 +49,17 @@ function get_avg(arry, size)
 end
 
 
-function test_throughput(delay_msec, cnt, key)
+function test(delay_msec, cnt, key)
 	pktgen.clr();
 	pktgen.start('all');
 	local rx = {}
 	pktgen.delay(2000)
 	for i=1, cnt, 1 do
-		local s = pktgen.portStats("all", "rate");
-		local cur_rx = s[0][key] + s[1][key]
+		local portStats = pktgen.portStats("all", "rate");
+		local cur = portStats[0][key] + portStats[1][key]
 
-		table.insert(rx, cur_rx)
-		printf("%s:%dMbps, \n", key, cur_rx)
+		table.insert(rx, cur)
+		-- printf("%s:%d, \n", key, cur)
 		pktgen.delay(delay_msec)
 	end
 	pktgen.stop('all');
@@ -68,19 +68,26 @@ end
 
 
 function main()
-	local cnt = 1
+	local cnt = 5
 	local dum = 0
+	local key = 'pkts_rx' -- pkts_rx,mbits_rx,avg_latency
 
-	setting(64  ); local res64   = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(128 ); local res128  = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(192 ); local res192  = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(256 ); local res256  = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(512 ); local res512  = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(1024); local res1024 = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
-	setting(1514); local res1514 = get_avg(test_throughput(1000, cnt, 'mbits_rx'), cnt);
+	setting(64  ); local res64   = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(128 ); local res128  = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(192 ); local res192  = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(256 ); local res256  = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(512 ); local res512  = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(1024); local res1024 = math.floor(get_avg(test(1000, cnt, key), cnt));
+	setting(1514); local res1514 = math.floor(get_avg(test(1000, cnt, key), cnt));
 
-	printf("%10d, %10d, %10d, %10d, %10d, %10d, %10d\n",
-		res64, res128, res192, res256, res512, res1024, res1514)
+	printf("%10d, ", res64  )
+	printf("%10d, ", res128 )
+	printf("%10d, ", res192 )
+	printf("%10d, ", res256 )
+	printf("%10d, ", res512 )
+	printf("%10d, ", res1024)
+	printf("%10d, ", res1514)
+	printf("\n")
 end
 
 
