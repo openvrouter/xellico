@@ -52,17 +52,6 @@ def exp_dpdkfunc():
     inside('rxburst_delay.csv', 'rxburst_delay.png')
     inside('txburst_delay.csv', 'txburst_delay.png')
 
-    # data = np.loadtxt('txbuffer_delay.csv',
-    #         delimiter=",", comments="#")
-    # idx = data[:,0]
-    # delays = data[:,1]
-    # plt.clf()
-    # plt.ylabel('latency [clock]')
-    # plt.xlabel('pkt size [bytes]')
-    # plt.xticks(range(len(idx)), idx)
-    # plt.plot(delays)
-    # plt.legend()
-    # plt.savefig('txbuffer_delay.png')
 
 def blackbox_inside(inname, outname):
     data = np.loadtxt(inname,
@@ -92,13 +81,15 @@ def blackbox_inside(inname, outname):
 
 def exp_rss():
     print("rss")
-    blackbox_inside('rss_throughput.csv', 'rss_throughput.png')
+    blackbox_inside('rss_throughput_bps.csv', 'rss_throughput_bps.png')
+    blackbox_inside('rss_throughput_pps.csv', 'rss_throughput_pps.png')
     blackbox_inside('rss_latency.csv', 'rss_latency.png')
 
 
 def exp_txbuffer():
     print("txbuffer")
-    blackbox_inside('bulktx_throughput.csv', 'bulktx_throughput.png')
+    blackbox_inside('bulktx_throughput_bps.csv', 'bulktx_throughput_bps.png')
+    blackbox_inside('bulktx_throughput_pps.csv', 'bulktx_throughput_pps.png')
     blackbox_inside('bulktx_latency.csv', 'bulktx_latency.png')
 
 

@@ -13,13 +13,20 @@ DPDKのAPIの一つである. PCIeのNICのTxの処理は計算量的に高コ�
 ため, 10GbE以上のトラフィックに対して1パケットずつ送信処理を行うと
 高性能化が行えなので, それを解決するための機構である.
 
-実験結果のグラフを :numref:`bulktx_throughput` , :numref:`bulktx_latency` に示す.
+実験結果のグラフを
+:numref:`bulktx_throughput_bps` ,
+:numref:`bulktx_throughput_pps` ,
+:numref:`bulktx_latency` に示す.
 
-.. figure:: img/bulktx_throughput.png
-  :name: bulktx_throughput
+.. figure:: img/bulktx_throughput_bps.png
+  :name: bulktx_throughput_bps
 
-  bulktxの性能計測結果(帯域)
+  bulktxの性能計測結果bps(帯域)
 
+.. figure:: img/bulktx_throughput_pps.png
+  :name: bulktx_throughput_pps
+
+  bulktxの性能計測結果pps(帯域)
 
 .. figure:: img/bulktx_latency.png
   :name: bulktx_latency
