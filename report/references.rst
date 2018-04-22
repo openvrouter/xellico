@@ -12,5 +12,6 @@
 - Takuya Asada, Linuxのネットワークスタックのスケーラビリティについて, http://syuu1228.hatenablog.com/entry/20101210/1291941459
 - Takuya Asada, Receive-Side Scalingについての調査メモ,  http://syuu1228.hatenablog.com/entry/20101219/1292725423
 - Souta Kawahara, Hiroki Shirokura, Xellico vRouter, https://github.com/slankdev/xellico
-
+- Sasha Goldshtein, The Next Linux Superpower: eBPF Primer, Usenix SREcon16 EUROPE, https://www.usenix.org/node/197449
+- Openconfigd github, https://github.com/coreswitch/openconfigd
 

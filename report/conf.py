@@ -120,7 +120,7 @@ latex_docclass = {'manual': 'jsbook'}
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'DPDKperformanceoptimization.tex',
-     'DPDK 性能最適化レポート \\\\ RSSとTxBufferに関しての詳細調査',
+     'DPDK 性能最適化レポート \\\\ RSSとTxBufferに関しての詳細調査\\\\内部と外部からのDPDKアプリケーションの性能推定方法について',
      'Hiroki Shirokura @slankdev\\\\Souta Kawahara @khwarizmi', 'manual'),
 ]
 
