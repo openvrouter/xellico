@@ -18,15 +18,27 @@ DPDKのAPIの一つである. PCIeのNICのTxの処理は計算量的に高コ�
 :numref:`bulktx_throughput_pps` ,
 :numref:`bulktx_latency` に示す.
 
+まずbpsについて
+
+.. csv-table::
+  :file: img/bulktx_throughput_bps.csv
+
 .. figure:: img/bulktx_throughput_bps.png
   :name: bulktx_throughput_bps
 
   bulktxの性能計測結果bps(帯域)
 
+次にppsについて
+
+.. csv-table::
+  :file: img/bulktx_throughput_pps.csv
+
 .. figure:: img/bulktx_throughput_pps.png
   :name: bulktx_throughput_pps
 
   bulktxの性能計測結果pps(帯域)
+
+そしてlatency
 
 .. figure:: img/bulktx_latency.png
   :name: bulktx_latency
