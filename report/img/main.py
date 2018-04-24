@@ -50,7 +50,7 @@ def exp_dpdkfunc():
         plt.legend()
         plt.savefig(outfile)
     inside('rxburst_delay.csv', 'rxburst_delay.png')
-    inside('txburst_delay.csv', 'txburst_delay.png')
+    inside('txbuffer_flush_delay.csv', 'txbuffer_flush_delay.png')
 
 
 def blackbox_inside(inname, outname):
