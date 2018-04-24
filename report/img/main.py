@@ -49,8 +49,8 @@ def exp_dpdkfunc():
         plt.plot(siz1514, label='pktsize=1514')
         plt.legend()
         plt.savefig(outfile)
-    inside('rxburst_delay.csv', 'rxburst_delay.png')
-    inside('txbuffer_flush_delay.csv', 'txbuffer_flush_delay.png')
+    inside('dpdk_rxburst_delay.csv', 'dpdk_rxburst_delay.png')
+    inside('dpdk_txbufferflush_delay.csv', 'dpdk_txbufferflush_delay.png')
 
 
 def blackbox_inside(inname, outname):
@@ -88,9 +88,9 @@ def exp_rss():
 
 def exp_txbuffer():
     print("txbuffer")
-    blackbox_inside('bulktx_throughput_bps.csv', 'bulktx_throughput_bps.png')
-    blackbox_inside('bulktx_throughput_pps.csv', 'bulktx_throughput_pps.png')
-    blackbox_inside('bulktx_latency.csv', 'bulktx_latency.png')
+    blackbox_inside('txbuffer_throughput_bps.csv', 'txbuffer_throughput_bps.png')
+    blackbox_inside('txbuffer_throughput_pps.csv', 'txbuffer_throughput_pps.png')
+    blackbox_inside('txbuffer_latency.csv'       , 'txbuffer_latency.png')
 
 
 def main():

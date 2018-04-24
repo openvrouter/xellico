@@ -14,35 +14,35 @@ DPDKのAPIの一つである. PCIeのNICのTxの処理は計算量的に高コ�
 高性能化が行えなので, それを解決するための機構である.
 
 実験結果のグラフを
-:numref:`bulktx_throughput_bps` ,
-:numref:`bulktx_throughput_pps` ,
-:numref:`bulktx_latency` に示す.
+:numref:`txbuffer_throughput_bps` ,
+:numref:`txbuffer_throughput_pps` ,
+:numref:`txbuffer_latency` に示す.
 
 まずbpsについて
 
 .. csv-table::
-  :file: img/bulktx_throughput_bps.csv
+  :file: img/txbuffer_throughput_bps.csv
 
-.. figure:: img/bulktx_throughput_bps.png
-  :name: bulktx_throughput_bps
+.. figure:: img/txbuffer_throughput_bps.png
+  :name: txbuffer_throughput_bps
 
-  bulktxの性能計測結果bps(帯域)
+  txbufferの性能計測結果bps(帯域)
 
 次にppsについて
 
 .. csv-table::
-  :file: img/bulktx_throughput_pps.csv
+  :file: img/txbuffer_throughput_pps.csv
 
-.. figure:: img/bulktx_throughput_pps.png
-  :name: bulktx_throughput_pps
+.. figure:: img/txbuffer_throughput_pps.png
+  :name: txbuffer_throughput_pps
 
-  bulktxの性能計測結果pps(帯域)
+  txbufferの性能計測結果pps(帯域)
 
 そしてlatency
 
-.. figure:: img/bulktx_latency.png
-  :name: bulktx_latency
+.. figure:: img/txbuffer_latency.png
+  :name: txbuffer_latency
 
-  bulktxの性能計測結果(遅延)
+  txbufferの性能計測結果(遅延)
 
 
