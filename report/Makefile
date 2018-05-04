@@ -21,3 +21,6 @@ help:
 
 re:
 	make clean && make html
+
+open:
+	open _build/html/index.html
