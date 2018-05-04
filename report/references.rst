@@ -17,5 +17,5 @@
 .. [eBPF] https://www.usenix.org/node/197449 Sasha Goldshtein, The Next Linux Superpower: eBPF Primer, Usenix SREcon16 EUROPE,
 .. [OPENCONFIGD] https://github.com/coreswitch/openconfigd Openconfigd github
 .. [PKTGENdpdk] http://dpdk.org/browse/apps/pktgen-dpdk/refs/
-
+.. [YASUaintec] https://dl.acm.org/citation.cfm?id=2837034, Yasuhiro Ohara et al, Revealing the Necessary Conditions to Achieve 80Gbps High-Speed PC Router, proceeding of the Asian Internet Engineering Conference (AINTEC'15)
 
