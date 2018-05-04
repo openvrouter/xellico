@@ -25,7 +25,7 @@ DPDKでRSSによるMultiQueueを有効化する場合, ``rte_eth_dev_configure``
 .. code-block:: c
 
   struct rte_eth_conf port_conf;
-  ...<省略>...
+  // ...<省略>...
   size_t n_rxq = 4;
   size_t n_txq = 8;
   conf.rxmode.mq_mode = ETH_MQ_RX_RSS;

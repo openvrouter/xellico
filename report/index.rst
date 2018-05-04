@@ -8,8 +8,10 @@ DPDK performance optimization
 
 .. toctree::
   :maxdepth: 2
+  :numbered:
   :caption: Contents:
 
+  summary
   introduction
   method
   experiment
