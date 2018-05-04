@@ -23,4 +23,10 @@ re:
 	make clean && make html
 
 open:
+	make clean && make html
 	open _build/html/index.html
+
+pdf:
+	make clean && make latexpdf
+	open _build/latex/*.pdf
+
