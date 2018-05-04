@@ -1,5 +1,7 @@
 
 
+.. _disscussion:
+
 考察
 ====
 

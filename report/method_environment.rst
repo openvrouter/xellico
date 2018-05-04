@@ -40,6 +40,7 @@ pktgen-dpdkを動作させた.
 
 .. figure:: img/evalnw.png
   :width: 60%
+  :name: evalnw
 
 	実験環境の物理ネットワーク
 
