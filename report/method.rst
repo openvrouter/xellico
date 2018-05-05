@@ -26,6 +26,5 @@
   method_environment
   method_xellico
   method_eval
-  method_flow
 
 

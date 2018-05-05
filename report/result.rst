@@ -7,9 +7,7 @@
 .. toctree::
   :maxdepth: 1
 
-  result_delay
-  result_dpdkfunc
-  result_txbuffer
-  result_rss
+  result_basic
+  result_ap_rss
 
 
