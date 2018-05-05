@@ -14,6 +14,13 @@ XellicoはGithubでOSSとして開発しており, https://github.com/slankdev/x
 設計
 ----
 
+本研究では,これらの性能計測を円滑に行うために,
+Xellicoというソフトウェアネットワークアプライアンスを新規に開発し,
+計測を行なった. Xellicoはオープンソースで開発を行なっており,
+DPDKのexample/l3fwdをforkして開発開始を行なった.
+本研究で調節を行たい, RSSとTxBufferの構成パターンを実行時に
+jsonファイルから入力することができ,性能評価に適している.
+
 まずは, 設計について説明する. XellicoはRun to Completionモデルで
 実装されており, NICのRSSを用いて同じ役割のスレッドを多重に並列動作させる.
 スレッドモデルを :numref:`threadmodel` に示す.
