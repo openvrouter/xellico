@@ -20,6 +20,7 @@
 .. toctree::
   :maxdepth: 1
 
+  method_calc
   method_practice
   method_goal
   method_environment

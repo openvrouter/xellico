@@ -16,4 +16,5 @@
 .. [OPENCONFIGD] https://github.com/coreswitch/openconfigd Openconfigd github
 .. [PKTGENdpdk] http://dpdk.org/browse/apps/pktgen-dpdk/refs/
 .. [YASUaintec] https://dl.acm.org/citation.cfm?id=2837034, Yasuhiro Ohara et al, Revealing the Necessary Conditions to Achieve 80Gbps High-Speed PC Router, proceeding of the Asian Internet Engineering Conference (AINTEC'15)
+.. [XEONSPplatinum8180] https://www.intel.co.jp/content/www/jp/ja/products/processors/xeon/scalable/platinum-processors/platinum-8180.html
 

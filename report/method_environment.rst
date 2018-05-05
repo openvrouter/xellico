@@ -19,7 +19,7 @@ pktgen-dpdkを動作させた.
   :header: 要素, 概要
   :widths: 5, 10
 
-  OS            , Ubuntu 16.04 LTS
+  OS            , Ubuntu 16.04.4 LTS
   Linux Kernel  , 4.4.0-116-generic
   DPDK          , 17.11 (forked from dpdk.org)
   NIC           , Intel X540-AT2 (10GbE)
@@ -33,12 +33,12 @@ pktgen-dpdkを動作させた.
   :header: 要素, 概要
   :widths: 5, 10
 
-  OS            , Ubuntu 16.04 LTS
-  Linux Kernel  , 4.4.0-116-generic
+  OS            , Ubuntu 16.04.3 LTS
+  Linux Kernel  , 4.4.0-87-generic
   DPDK          , 17.11 (forked from dpdk.org)
   NIC           , Intel X540-AT2 (10GbE)
-  CPU           , Intel(R) Xeon(R) Silver 4108 CPU @ 1.80GHz x2
-  RAM           , DDR4 32GB
+  CPU           , Intel(R) Xeon(R) CPU E5-2667 v3 @ 3.20GHz x2
+  RAM           , 種類不明 64GB
   HyperThreading, Disabled
 
 性能計測時は以下に示す通りに接続して検証をおこなった.
