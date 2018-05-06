@@ -1,5 +1,5 @@
 
-RSSの実験方法
+応用実験(RSS)
 =============
 
 ここではRSS(Receive Side Scaling)に関する調査報告を行う.

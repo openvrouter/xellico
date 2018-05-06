@@ -30,3 +30,7 @@ pdf:
 	make clean && make latexpdf
 	open _build/latex/*.pdf
 
+all:
+	make clean
+	make html
+	make latexpdfja

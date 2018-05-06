@@ -4,12 +4,24 @@
 実験
 =====
 
+本研究の実験の流れ
+
+- 実験準備
+- 基本計測
+- RSS等の機能に関して応用計測
+
+本研究では大きく分けて3つの実験を行う.それぞれ"遅延の評価",
+"基本評価", "RSSの評価"を行う.
+前半(基本計測まで)では, 非常にシンプルなDPDKアプリケーションの評価を行いながら,
+内部外部での性能計測方法に関して考える. 後半では, 前半でわかった結果が
+RSS等の支援機能を用いた場合でどの様に変化するかを考える.
+
+
 .. toctree::
   :maxdepth: 1
 
-  experiment_delay
-  experiment_dpdkfunc
-  experiment_txbuffer
-  experiment_rss
+  experiment_prep
+  experiment_basic
+  experiment_ap_rss
 
 

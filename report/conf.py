@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'DPDK performance optimization'
+project = 'DPDK performance analysis'
 copyright = '2018, Hiroki Shirokura'
 author = 'Hiroki Shirokura, Souta Kawahara'
 version = ''
@@ -35,7 +35,7 @@ release = '0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [ 'sphinx.ext.todo' ]
+extensions = [ 'sphinx.ext.todo', 'sphinx.ext.mathjax' ]
 
 [extensions]
 todo_include_todos = True
@@ -120,7 +120,7 @@ latex_docclass = {'manual': 'jsbook'}
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'DPDKperformanceoptimization.tex',
-     'DPDK 性能最適化レポート \\\\ RSSとTxBufferに関しての詳細調査\\\\内部と外部からのDPDKアプリケーションの性能推定方法について',
+     'DPDK性能解析レポート \\\\ 形式的解析手法の提案と実践',
      'Hiroki Shirokura @slankdev\\\\Souta Kawahara @khwarizmi', 'manual'),
 ]
 

@@ -2,8 +2,6 @@
 参考文献
 =========
 
-本レポートを記述するにあたり参考にした文献を示す.
-
 .. [PANDA20150409] http://seminar-materials.iijlab.net/iijlab-seminar/iijlab-seminar-20150409-0.pdf Hirochika Asai, Networking Operating System from Scratch towards High-Performance COTS Network Facili/es, IIJ lab-seminor 2015/4/9,
 .. [DPDKorg] http://dpdk.org DPDK Official Site
 .. [DPDKprgguide] http://dpdk.org/doc/guides/prog_guide/index.html DPDK Programmer's Guide,
@@ -18,4 +16,5 @@
 .. [OPENCONFIGD] https://github.com/coreswitch/openconfigd Openconfigd github
 .. [PKTGENdpdk] http://dpdk.org/browse/apps/pktgen-dpdk/refs/
 .. [YASUaintec] https://dl.acm.org/citation.cfm?id=2837034, Yasuhiro Ohara et al, Revealing the Necessary Conditions to Achieve 80Gbps High-Speed PC Router, proceeding of the Asian Internet Engineering Conference (AINTEC'15)
+.. [XEONSPplatinum8180] https://www.intel.co.jp/content/www/jp/ja/products/processors/xeon/scalable/platinum-processors/platinum-8180.html
 
