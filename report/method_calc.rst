@@ -1,6 +1,5 @@
 
 
-
 Packet/Secondの計算に関して
 ===========================
 
@@ -21,67 +20,55 @@ Packet/Secondの計算に関して
 .. math::
 
   10G bit/sec \\
-  sizeof(Ethernet Frame) = 64 byte \\
+  sizeof(Ethernet Frame) = 64 byte (including FCS) \\
   sizeof(preamble)       = 8  byte \\
-  sizeof(FCS)            = 4  byte \\
   sizeof(InterFrameGap)  = 12 byte \\
-  PacketSize = 88 byte = 704 bit \\
+  PacketSize = 84 byte = 672 bit \\
 
-  10Gbit = 14.2 Mpacket \\
-  64B, 10Gbps = 14Mpps \\
+  10Gbit = 14.8 Mpacket \\
+  64B, 10Gbps = 14.8Mpps \\
 
 64B,10Gbps=14Mpps, 秒に関して
 
 .. math::
 
-  14Mpps = 14*10^6 packet/sec \\
-  14*10^6 packet = 1 sec \\
-  1 packet = frac {1} {14*10^6} sec \\
-  1 packet = 71*10^-9 sec \\
-  1 packet = 71 nsec \\
+  14.8Mpps = 14.8*10^6 packet/sec \\
+  14.8*10^6 packet = 1 sec \\
+  1 packet = \frac {1} {14.8*10^6} sec \\
+  1 packet = 67*10^-9 sec \\
+  1 packet = 67 nsec \\
 
 64B,10Gbps=14Mpps, 3GHz-CPUに関して
 
 .. math::
 
   3GHz = 3*10^9 clock/sec \\
-  14Mpps = 14M packet/sec \\
+  14.8Mpps = 14.8M packet/sec \\
 
-  14*10^6 packet = 3*10^9 clock \\
-  1 packet = \frac {3*10^9} {14*10^6} clock \\
-  1 packet = 214 clock
+  14.8*10^6 packet = 3*10^9 clock \\
+  1 packet = \frac {3*10^9} {14.8*10^6} clock \\
+  1 packet = 202.7 clock
 
-64B,10Gbps=14Mpps, 2GHz-CPUに関して
-
-.. math::
-
-  2GHz = 2*10^9 clock/sec \\
-  14Mpps = 14M packet/sec \\
-
-  14*10^6 packet = 2*10^9 clock \\
-  1 packet = \frac {2*10^9} {14*10^6} clock \\
-  1 packet = 142 clock
-
-64B,100Gbps=142Mpps, 秒に関して
+64B,100Gbps=148Mpps, 秒に関して
 
 .. math::
 
-  142Mpps = 142*10^6 packet/sec \\
-  142*10^6 packet = 1 sec \\
-  1 packet = frac {1} {142*10^6} sec \\
-  1 packet = 7*10^-9 sec \\
-  1 packet = 7 nsec !!!! \\
+  148Mpps = 148*10^6 packet/sec \\
+  148*10^6 packet = 1 sec \\
+  1 packet = \frac {1} {148*10^6} sec \\
+  1 packet = 6.72*10^-9 sec \\
+  1 packet = 6.72 nsec !!!! \\
 
-64B,100Gbps=142Mpps, 3GHz-CPUに関して
+64B,100Gbps=148Mpps, 3GHz-CPUに関して
 
 .. math::
 
   3GHz = 3*10^9 clock/sec \\
-  142Mpps = 142 * 10^6 packet/sec \\
+  148Mpps = 148 * 10^6 packet/sec \\
 
-  142*10^6 packet = 3*10^9 clock \\
-  1 packet = \frac {3*10^9} {142*10^6} clock \\
-  1 packet = 21 clock !!!!
+  148*10^6 packet = 3*10^9 clock \\
+  1 packet = \frac {3*10^9} {148*10^6} clock \\
+  1 packet = 20 clock !!!!
 
 
 脇道にそれて少し考察
@@ -120,27 +107,27 @@ Packet/Secondの計算に関して
 .. math::
 
   400Gbit/sec\\
-  PacketSize = 88byte = 704bit \\
-  400Gbit = 568Mpps \\
+  PacketSize = 84byte = 672 \\
+  400Gbit = 592 \\
 
-64B,400Gbps=568Mpps, 3.5GHz-CPUに関して
+64B,400Gbps=592Mpps, 3.5GHz-CPUに関して
 
 .. math::
 
-  568Mpps = 568 * 10^6 packet / sec \\
+  592Mpps = 592 * 10^6 packet / sec \\
   3.5GHz = 3.5 * 10^9 clock /sec \\
 
-  568Mpps = 3.5Ghz \\
-  568 * 10^6 packet = 3.5 * 10^9 clock \\
-  1 packet = frac {3.5 * 10^9} {568 * 10^6} clock \\
-  1 packet = 6 clock !! \\
+  592Mpps = 3.5Ghz \\
+  592 * 10^6 packet = 3.5 * 10^9 clock \\
+  1 packet = frac {3.5 * 10^9} {592 * 10^6} clock \\
+  1 packet = 5.9 clock !! \\
 
 コア数が112個あるので, RSSで完全並列にしたとして,
 
 .. math::
 
-  6 clock/packet, 1 cores \\
-  672 clock/packet, 112 cores \\
+  5.9 clock/packet, 1 cores \\
+  660.8 clock/packet, 112 cores \\
 
 うーん.. 帯域レベルを満足させるのなら, なんとかできそう..?
 ちなみにこの構成でDEELのマシンを組んでみると以下のような見積もり値段である.
